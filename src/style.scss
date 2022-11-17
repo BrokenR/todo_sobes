@@ -1,0 +1,23 @@
+body{
+  font-family: 'Pacifico', cursive;
+  width: 700px;
+  min-height: max-content;
+  border: 2px solid #f5f5f5;
+  margin: auto;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  .container {
+    position: relative;
+    width: 100%;
+
+    background-color: #f5f5f5;
+    .main{
+      position: relative;
+      width: 90%;
+      margin: 0 auto;
+      flex: 1;
+      padding-bottom: 15px;
+    }
+  }
+}
