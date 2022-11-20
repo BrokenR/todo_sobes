@@ -2,14 +2,14 @@ import React from 'react';
 import './Bottom.scss'
 import {Task} from "../../App";
 
-interface Props{
+interface BottomProps{
     list: Task[]
     filterActive:Function
     filterCompleted: Function
     showAll:Function
     clearAll:Function
 }
-export const Bottom:React.FC<Props> =({list, filterActive, filterCompleted, showAll, clearAll}):React.ReactElement=> {
+export const Bottom:React.FC<BottomProps> =({list, filterActive, filterCompleted, showAll, clearAll}):React.ReactElement=> {
     const [active, setActive] = React.useState<Number>(1)
     const bottomHandlerAll = ()=>{
         showAll()

@@ -18,6 +18,9 @@ body{
       margin: 0 auto;
       flex: 1;
       padding-bottom: 15px;
+      & button:hover{
+        cursor: pointer;
+      }
     }
   }
 }
