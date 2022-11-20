@@ -1,9 +1,3 @@
 {
-  "tasks": [
-    {
-      "data": "dsa",
-      "completed": false,
-      "id": 1
-    }
-  ]
+  "tasks": []
 }

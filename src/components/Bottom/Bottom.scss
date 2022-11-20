@@ -24,6 +24,10 @@
     button{
       background: #fefefe;
       border: none;
+      &:hover{
+        cursor: pointer;
+
+      }
     }
   }
 }
