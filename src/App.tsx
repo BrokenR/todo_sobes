@@ -1,12 +1,16 @@
+//Не понял как добавить файл...
 import React from "react";
 import "./style.scss";
 import { Header, TodoList, Bottom } from "./components/index";
 import axios from "axios";
 
 export interface Task {
+  title: string;
   data: string;
   completed: boolean;
+  date: string;
   id?: number;
+  files?: any
 }
 
 function App() {
@@ -15,18 +19,19 @@ function App() {
     axios.get("http://localhost:3001/tasks/").then(({ data }) => {
       setList(data);
     });
-    console.log("nene");
+
+    list.map((item, id) => (item.id = id));
+    console.log(list);
   }, []);
   const onCompleteTask = (id: number, completed: boolean) => {
     const newList: Task[] = list.map((item) => {
-      console.log("id:", id, "item:", item, item);
-      if (item.id === id + 1) {
+      if (item.id === id) {
         item.completed = completed;
       }
       return item;
     });
     setList(newList);
-    axios.patch(`http://localhost:3001/tasks/${id + 1}`, { completed });
+    axios.patch(`http://localhost:3001/tasks/${id}`, { completed });
   };
   const filterActive = () => {
     axios
@@ -53,27 +58,70 @@ function App() {
     setList([]);
   };
 
-  const onAddTask = (data: Task, e: React.FormEvent<HTMLElement>) => {
-    e.stopPropagation();
+  const onAddTask = (data: Task): void => {
+    if (data.files) {
+      const formData = new FormData();
+      formData.append("file", data.files[0]);
+      const file = formData.get('file')
+      }
+      
+
+    axios.post<Task>("http://localhost:3001/tasks/", {
+      title: data.title,
+      data: data.data,
+      completed: data.completed,
+      date: data.date,
+      file:data.files? new FormData(data.files[0]):null,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     setList([...list, data]);
-    axios
-      .post("http://localhost:3001/tasks/", {
-        data: data.data,
-        completed: data.completed,
-      })
-      .then((res) => console.log(res.status));
+  };
+  const onEditTask = (
+    id: number,
+    title: string,
+    data: string,
+    date: string
+  ) => {
+    const newList = list.map((item) => {
+      if (item.id === id) {
+        item.title = title;
+        item.data = data;
+        item.date = date;
+        axios.patch("http://localhost:3001/tasks/" + item.id, {
+          title,
+          data,
+          date,
+        });
+        return item;
+      }
+      return item;
+    });
+    setList(newList);
+  };
+  const onRemoveTask = (id: number) => {
+    const newList = list.filter((item) => item.id !== id);
+    setList(newList);
+    axios.delete("http://localhost:3001/tasks/" + id);
   };
   return (
     <div className="container">
       <div className="main">
         <Header
-          addTask={(data, completed, e) => onAddTask({ data, completed }, e)}
+          addTask={(title, data, completed, date, files) =>
+            onAddTask({ title, data, completed, date, files })
+          }
         />
         <TodoList
           list={list}
+          onEditTask={(id: number, title: string, data: string, date: string) =>
+            onEditTask(id, title, data, date)
+          }
           completeTask={(id: number, completed: boolean) =>
             onCompleteTask(id, completed)
           }
+          deleteTask={(id: number) => onRemoveTask(id)}
         />
         <Bottom
           list={list}

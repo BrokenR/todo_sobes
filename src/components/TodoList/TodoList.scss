@@ -20,6 +20,18 @@
       align-items: center;
       span{
         margin-left: 10px;
+        flex: 1;
+      }
+      .editInput{
+        flex: 1;
+        margin-left: 10px;
+        height: 35px;
+        border: none;
+        &:focus{
+          outline: none;
+          height: 100%;
+          
+        }
       }
       .checkbox{
         input{
